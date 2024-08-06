@@ -1,0 +1,24 @@
+services:
+
+  backend:
+    build: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    volumes:
+      - ./alembic:/agromap/backend/alembic
+      - ./app:/agromap/backend/app
+      - ./tests:/agromap/backend/tests
+      - ./htmlcov:/agromap/backend/htmlcov
+
+  db:
+    build: db
+    environment:
+      - POSTGRES_USER=appuser
+      - POSTGRES_DB=agromap
+      - POSTGRES_PASSWORD=qaz123wsx
+    ports:
+      - 5432:5432
+    volumes:
+     - ./volumes/postgres:/var/lib/postgresql/data
