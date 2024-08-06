@@ -48,4 +48,14 @@ Ele vai gerar uma nova pasta chamada alembic que vai ser a pasta responsavel por
 Para questoes de configuracoes do projeto, vamos mudar a configuracao 
 `sqlalchemy.url` (linha 63 de [alembic.ini](./alembic.ini)) para, em vez de receber a url do banco diretamente, agora vai receber atraves da variavel de ambiente configurada em [.env]
 
-E tambem, vou precisar adicionar as linhas 12 e 13 de [alembic/env.py](./alembic/env.py). Para fazer o replace do valor da variavel de ambiente no arquivo `alembic.ini`
+E tambem, vou precisar adicionar as linhas 12 e 13 de [alembic/env.py](./alembic/env.py). Para fazer o replace do valor da variavel de ambiente no arquivo `alembic.ini`.
+
+ ### 4. Defina a tecnologia e a forma de uso a Autenticação e Autorização
+Em termos de Autenticacao podemos usar um JWT (JSON Web Token), por ser leve, padronizada, bem documentada e nao precisa manter nenhum estado no servidor.
+Para atingir este objetivo, vou utilizar os pacotes `passlib[bcrypt]==1.7.4` e `python-jose[cryptography]==3.3.0`. O primeiro para usar como criptografia para a senha do usuario e o segundo como criador,decodificador e validador do JWT.
+
+Para o caso das rotas que precisam de autenticacao vou utilizar o recurso de `Depends` do FastAPI para que toda rota que precisar ser autenticada, deve Executar a class [JWTBearer](./app/services/auth/auth_bearer.py). Essa classe vai verificar o scheme de autenticacao e decodificar o JWT para verficar se eh valido ou nao. Caso nao seja Valido, retorna o HTTP status 403.
+
+Outro passo importante para autenticacao deve ser a forma como as credenciais do usuario sao salvas no banco. A senha do usuario, antes de ser salva no banco eh criptografada usando uma funcao hash `hash_password` em [app/services/security/password.py](./app/services/security/password.py?#L8)
+
+Quanto a logica de geracao do Token JWT pode ser encontrada em [authenticate_user_service.py](./app/services/auth/authenticate_user_service.py). Basicamente, uma vez que sao validadas as informacoes de usuario e senha, a funcao [`create_access_token`](./app/services/security/tokens.py?#L9) eh chamada. Ela vai ser responsavel por fazer o encodingo do payload do Token. Configurar a data de expiracao com base na variavel de ambiente `JWT_ACCESS_TOKEN_EXPIRE_MINUTES`. A assinatura do Token sera calculada atraves dos parametros configurados nas variaveis `JWT_SECRET_KEY` e `JWT_ALGORITHM`

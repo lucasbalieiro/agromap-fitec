@@ -4,11 +4,8 @@ from app.error.business_logic_error import handle_exception
 from app.repositories.dependencies import get_user_repository
 from app.schemas.auth import AuthRequest, AuthResponse
 from app.services.auth import (
-    authenticate_user_service,
-    logout_user_service,
-    requests_user_password_recovery_service,
+    authenticate_user_service
 )
-from app.services.auth.auth_bearer import JWTBearer
 
 router = APIRouter(
     prefix="/auth",
@@ -52,22 +49,6 @@ async def login(
             user_repository,
         )
         return token
-    except Exception as e:
-        error = handle_exception(e)
-        raise HTTPException(status_code=error.status_code, detail=error.message)
-
-
-@router.get(
-    "/logout",
-    summary="Logout",
-    status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(JWTBearer())],
-)
-async def logout(request: Request, user_repository=Depends(get_user_repository)):
-    try:
-        authorization_header = request.headers.get("Authorization")
-        token = authorization_header.split(" ")[1]
-        logout_user_service.execute(token, user_repository)
     except Exception as e:
         error = handle_exception(e)
         raise HTTPException(status_code=error.status_code, detail=error.message)
