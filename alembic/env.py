@@ -1,8 +1,8 @@
 from logging.config import fileConfig
 
 from app.models.base_model import BaseModel
-from app.models.user import User  # noqa
 from app.models.role import Role  # noqa
+from app.models.user import User  # noqa
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool

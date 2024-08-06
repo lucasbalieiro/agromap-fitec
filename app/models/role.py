@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from app.models.base_model import BaseModel
+from app.models.user import User
 
 
 class Role(BaseModel):
@@ -13,4 +14,4 @@ class Role(BaseModel):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(50), nullable=False, unique=True)
 
-    users = relationship("User", back_populates="role")
+    users = relationship(User, back_populates="role")
