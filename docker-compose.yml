@@ -15,8 +15,8 @@ services:
   db:
     build: db
     environment:
-      - POSTGRES_USER=appuser
-      - POSTGRES_DB=agromap
+      - POSTGRES_USER appuser
+      - POSTGRES_DB agromap
       - POSTGRES_PASSWORD=qaz123wsx
     ports:
       - 5432:5432

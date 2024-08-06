@@ -30,3 +30,22 @@ Estou assumindo que o ambiente de desenvolvimento, homologacao e producao estao 
 - Passo 4: Iniciar as configuracoes de Docker. Crio um [Dockerfile](./Dockerfile) com a imagem para o backend, outra para o [banco de dados](./db/Dockerfile), que vou utilizar o postgresql. E faco o orquestramento deles via [docker compose](./docker-compose.yml)
 
 ### 2 Defina e escolha e Configuração do ORM
+Meu ORM de escolha eh o `SQLAlchemy` pela facilidade de utilizacao, documentacao abrangente, junto com um bom suporte da comunidade.
+Para a configuracao do ORM vou precisar de dois pacotes `sqlalchemy==2.0.32` e `psycopg2-binary==2.9.9`. O `psycopg2-binary` vai ser o driver o que `sqlalchemy` vai utilizar pra conectar e gerenciar as conexoes e transacoes do nosso querido postgres.
+Depois disso, resolvo criar uma funcao de conexao e retorno de uma sessao do banco em [database.py](./app/config/database.py). Isso vai me permitir que eu reutilize com mais facilidade essa funcao de conexao e vai se adequar melhor com a injecao de dependencias do FastAPI
+
+###  3 Como versionar e organizar as migrações de Banco de Dados
+
+Como estou utilizando o SQLAlchemy, nada mais natural do que usar o `alembic` para versionar o banco de dados.
+
+Como nao ha necessidades especificas, as configuracoes inicias do `alembic` podem ser alcancadas atraves do comando 
+```bash
+alembic init alembic
+```
+
+Ele vai gerar uma nova pasta chamada alembic que vai ser a pasta responsavel por armazenas as versoes do banco e algumas configuracoes do alembic. Outro arquivo importante, gerado com esse comando, na raiz do diretorio, é o `alembic.ini`
+
+Para questoes de configuracoes do projeto, vamos mudar a configuracao 
+`sqlalchemy.url` (linha 63 de [alembic.ini](./alembic.ini)) para, em vez de receber a url do banco diretamente, agora vai receber atraves da variavel de ambiente configurada em [.env]
+
+E tambem, vou precisar adicionar as linhas 12 e 13 de [alembic/env.py](./alembic/env.py). Para fazer o replace do valor da variavel de ambiente no arquivo `alembic.ini`
