@@ -40,10 +40,8 @@ Estou assumindo que os ambientes de desenvolvimento, homologação e produção 
     http://localhost:8000/docs
     ```
 
-4. Para visualizar o relatório de cobertura de testes, abra o arquivo `index.html` em seu navegador:
-    ```
-    [index.html](./htmlcov/index.html)
-    ```
+4. Para visualizar o relatório de cobertura de testes, abra o arquivo `index.html` em seu navegador:[index.html](./htmlcov/index.html)
+
 
 ### 1. Descreva as etapas para executar a configuração inicial do projeto
 
