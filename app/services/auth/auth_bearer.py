@@ -16,14 +16,6 @@ class JWTBearer(HTTPBearer):
                 status_code=403, detail="Invalid authentication scheme."
             )
 
-        if credentials.credentials.startswith("INTERNAL"):
-            valid_token = self.verify_internal_token(credentials.credentials)
-            if not valid_token:
-                raise HTTPException(
-                    status_code=403, detail="Invalid or expired internal token."
-                )
-            return credentials.credentials
-
         if not self.verify_jwt(credentials.credentials):
             raise HTTPException(status_code=403, detail="Invalid or expired token.")
         return credentials.credentials

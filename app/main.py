@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes.roles import router as roles_router
+from app.routes.users import router as users_router
 
 
 def create_application():
@@ -9,6 +10,7 @@ def create_application():
         title="AgroMap API"
     )
     application.include_router(roles_router)
+    application.include_router(users_router)
     application.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
