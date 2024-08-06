@@ -22,9 +22,7 @@ class UserRepositoryMock(IUserRepository):
             name=payload.name,
             email=payload.email,
             password=payload.password,
-            department_id=payload.department_id,
-            role_id=payload.role_id,
-            status=True,
+            role_id=payload.role_id
         )
         self.db.append(new_user)
         return new_user
